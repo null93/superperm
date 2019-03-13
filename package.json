@@ -1,0 +1,17 @@
+{
+	"name": "superpermutation",
+	"description": "An attempt to find an optimal heuristic solution to the superpermutation problem.",
+	"version": "1.0.0",
+	"main": "src/index.js",
+	"repository": "git@github.com:null93/superpermutation.git",
+	"author": "Rafael Grigorian <me@raffi.io>",
+	"license": "MIT",
+	"dependencies": {
+		"heaps-permute": "^2.0.3"
+	},
+	"scripts": {
+		"clean": "rm -rf ./dist/*",
+		"generate": "tools/generate.js",
+		"test": "tools/test.js"
+	}
+}

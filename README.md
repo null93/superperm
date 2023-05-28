@@ -1,8 +1,8 @@
-# superpermutation
+# superperm
 > An attempt to find an optimal heuristic solution to the superpermutation problem.
 
-![version](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=for-the-badge)
-![license](https://img.shields.io/badge/Version-1.0.0-lightgrey.svg?style=for-the-badge)
+![license](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=for-the-badge)
+![version](https://img.shields.io/badge/Version-2.0.0-lightgrey.svg?style=for-the-badge)
 
 ## About
 
@@ -10,26 +10,21 @@ This project takes a heuristic approach when attempting to solve the superpermut
 
 ## Findings
 
-| **\|alphabet\|** | **\|superpermutation\|** | **timing (ms)** |
-|:----------------:|:------------------------:|:---------------:|
-|         1        |             1            |        0.453785 |
-|         2        |             3            |        0.225103 |
-|         3        |             9            |        0.048298 |
-|         4        |            33            |        0.121518 |
-|         5        |            153           |        1.065073 |
-|         6        |            873           |       14.740946 |
-|         7        |           5913           |      436.643946 |
-|         8        |           46233          |     30867.66657 |
-|         9        |          409113          |  1922906.717888 |
+| **\|alphabet\|** | **\|shortest(alphabet)\|** | **\|rotate(alphabet)\|** | **runtime(rotate(alphabet))** |
+|:----------------:|:------------------------:|:---------------:|:---------------:|
+| 1 | 1      | 1      | 750ns        |
+| 2 | 3      | 3      | 2.166µs      |
+| 3 | 9      | 9      | 3.666µs      |
+| 4 | 33     | 33     | 8.583µs      |
+| 5 | 153    | 153    | 47.25µs      |
+| 6 | 872    | 873    | 254.709µs    |
+| 7 | 5907   | 5913   | 2.402625ms   |
+| 8 | 46205  | 46233  | 15.063542ms  |
+| 9 | 408966 | 409113 | 138.998333ms |
 
-## Tools & Commands
+## Development
 
-|   **command**   |                    **description**                   |
-|:---------------:|:-----------------------------------------------------|
-| `yarn install`  | Install project dependencies.                        |
-| `yarn generate` | Calculate superpermutations and save them to `dist`. |
-| `yarn test`     | Test validity of generated superpermutations.        |
-| `yarn clean`    | Delete generated superpermutations.                  |
+Run `make help` for all available commands. In general, you can run `make build-all` to build the binary for all platforms.
 
 ## Additional Resources
 

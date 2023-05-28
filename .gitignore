@@ -1,5 +1,8 @@
 # Files
+
 .DS_Store
 
-# Folders
-node_modules
+# Directories
+
+bin
+private

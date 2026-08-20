@@ -7,12 +7,39 @@ import (
 
 var HistogramPoint = "\033[33m♦\033[0m"
 
+var ColorReset = "\033[0m"
+var Colors = []string{
+	"\033[31m",
+	"\033[32m",
+	"\033[33m",
+	"\033[34m",
+	"\033[35m",
+	"\033[36m",
+	"\033[91m",
+	"\033[92m",
+	"\033[93m",
+	"\033[94m",
+	"\033[95m",
+	"\033[96m",
+}
+
+var colorEnabled = true
+
 func DisableColor(state bool) {
+	colorEnabled = !state
 	if state {
 		HistogramPoint = "♦"
 	} else {
 		HistogramPoint = "\033[33m♦\033[0m"
 	}
+}
+
+func Colorize(input string, i int) string {
+	if !colorEnabled {
+		return input
+	}
+	n := len(Colors)
+	return Colors[((i%n)+n)%n] + input + ColorReset
 }
 
 func RotateArray(input []string, start, end, rotations int) []string {
@@ -136,31 +163,126 @@ func PrintHeatMap(perms []string, input string) {
 	}
 }
 
-func Extract(perms []string, superpermutation string) []string {
-	results := []string{}
+type Extraction struct {
+	Index       int
+	Permutation string
+	Thread      int
+	Shift       int
+}
+
+func Extract(perms []string, superpermutation string) []Extraction {
+	results := []Extraction{}
+	if len(perms) == 0 {
+		return results
+	}
+	set := map[string]bool{}
 	for _, p := range perms {
-		n := len(p)
-		last := 0
-		layer := strings.Repeat(" ", len(superpermutation))
-		index := strings.Index(superpermutation[last:], p)
-		for index != -1 {
-			layer = layer[0:index+last] + p + layer[index+last+n:]
-			last = index + n
-			fmt.Println(last, superpermutation[last:])
-			index = strings.Index(superpermutation[last:], p)
-			fmt.Println("index", index)
+		set[p] = true
+	}
+	n := len(perms[0])
+	thread := -1
+	previous := -2
+	shift := 0
+	for i := 0; i+n <= len(superpermutation); i++ {
+		window := superpermutation[i : i+n]
+		if set[window] {
+			if i != previous+1 {
+				thread++
+				if thread > 0 {
+					shift += i - previous - 1
+				}
+			}
+			results = append(results, Extraction{i, window, thread, shift})
+			previous = i
 		}
-		for _, r := range layer {
-			fmt.Printf("%c ", r)
-		}
-		fmt.Println()
-		results = append(results, layer)
 	}
 	return results
 }
 
-func PrintExtraction() {
+func GroupThreads(extractions []Extraction) [][]Extraction {
+	threads := [][]Extraction{}
+	for _, extraction := range extractions {
+		last := len(threads) - 1
+		if last < 0 || threads[last][0].Thread != extraction.Thread {
+			threads = append(threads, []Extraction{extraction})
+		} else {
+			threads[last] = append(threads[last], extraction)
+		}
+	}
+	return threads
+}
 
+func PackExtractions(extractions []Extraction) [][]Extraction {
+	threads := GroupThreads(extractions)
+	if len(threads) < 1 {
+		return [][]Extraction{}
+	}
+	placed := map[int][]Extraction{}
+	ends := map[int]int{}
+	direction := 1
+	last := 0
+	lowest := 0
+	highest := 0
+	for t, thread := range threads {
+		if t > 1 {
+			delta := thread[0].Index - threads[t-1][len(threads[t-1])-1].Index
+			previous := threads[t-1][0].Index - threads[t-2][len(threads[t-2])-1].Index
+			if delta > previous {
+				direction = 1
+			} else if delta < previous {
+				direction = -1
+			}
+		}
+		base := 0
+		if t > 0 {
+			base = last + direction
+		}
+		for !fitsThread(thread, ends, base, direction) {
+			base += direction
+		}
+		for i, extraction := range thread {
+			row := base + direction*i
+			placed[row] = append(placed[row], extraction)
+			ends[row] = extraction.Index + len(extraction.Permutation)
+			if row < lowest {
+				lowest = row
+			}
+			if row > highest {
+				highest = row
+			}
+		}
+		last = base + direction*(len(thread)-1)
+	}
+	rows := [][]Extraction{}
+	for row := lowest; row <= highest; row++ {
+		if len(placed[row]) > 0 {
+			rows = append(rows, placed[row])
+		}
+	}
+	return rows
+}
+
+func fitsThread(thread []Extraction, ends map[int]int, base, direction int) bool {
+	for i, extraction := range thread {
+		if end, taken := ends[base+direction*i]; taken && end > extraction.Index {
+			return false
+		}
+	}
+	return true
+}
+
+func PrintExtraction(perms []string, superpermutation string) {
+	fmt.Println(superpermutation)
+	for _, row := range PackExtractions(Extract(perms, superpermutation)) {
+		line := strings.Builder{}
+		column := 0
+		for _, extraction := range row {
+			line.WriteString(strings.Repeat(" ", extraction.Index-column))
+			line.WriteString(Colorize(extraction.Permutation, extraction.Shift))
+			column = extraction.Index + len(extraction.Permutation)
+		}
+		fmt.Println(line.String())
+	}
 }
 
 func Factorial(n int) int {

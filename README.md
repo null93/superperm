@@ -4,6 +4,8 @@
 ![license](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=for-the-badge)
 ![version](https://img.shields.io/badge/Version-2.0.0-lightgrey.svg?style=for-the-badge)
 
+<img width="882" height="617" alt="Screenshot" src="https://github.com/user-attachments/assets/cd20782b-e754-418c-94e4-e4683e4421e2" />
+
 ## About
 
 This project takes a heuristic approach when attempting to solve the superpermutation problem. The superpermutation problem is an open mathematics problem. At the moment, when the alphabet cardinality is 6, this algorithm does not find the shortest _known_ superpermutation. This project is still a work in progress and further attempts to optimize the algorithm will be made.

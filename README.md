@@ -22,21 +22,28 @@ It uses his computer-found seeds, so it hits his Lean-proved length of 46,181 fo
 For 9 symbols it also uses the cut points and join order from rumstd's tweak of Pantone's word, which gets it down to 408,731.
 For fewer than 8 symbols it falls back to whichever of `standard` and `egan` is shorter.
 
+The `euler` strategy is my own take on Pantone's construction.
+Instead of using his precomputed seeds, it searches for its own seed every time you run it, looking for a walk through the 2-loops that stays the same when you swap certain pairs of letters.
+For 8 symbols it finds a seed just as good as Pantone's, so it hits 46,181 without any outside data.
+No seed with that kind of symmetry does better, so beating 46,181 this way would take a seed without it.
+For 9 symbols it carries that seed up one size, which gets 408,831.
+For fewer than 8 symbols it falls back to whichever of `standard` and `egan` is shorter.
+
 The `shortest` column is the shortest length I know of for each alphabet size, collected from other people's work (see the links at the bottom).
 
 ## Findings
 
-| **\|alphabet\|** | **\|shortest(alphabet)\|** | **\|standard(alphabet)\|** | **\|egan(alphabet)\|** | **\|pantone(alphabet)\|** |
-|:----------------:|:------------------------:|:-----------------------:|:-------------------:|:----------------------:|
-| 1 | 1      | 1      | 1      | 1      |
-| 2 | 3      | 3      | 3      | 3      |
-| 3 | 9      | 9      | 9      | 9      |
-| 4 | 33     | 33     | 34     | 33     |
-| 5 | 153    | 153    | 154    | 153    |
-| 6 | 872    | 873    | 873    | 873    |
-| 7 | 5907   | 5913   | 5908   | 5908   |
-| 8 | 46181  | 46233  | 46205  | 46181  |
-| 9 | 408731 | 409113 | 408966 | 408731 |
+| **\|alphabet\|** | **\|shortest(alphabet)\|** | **\|standard(alphabet)\|** | **\|egan(alphabet)\|** | **\|pantone(alphabet)\|** | **\|euler(alphabet)\|** |
+|:----------------:|:------------------------:|:-----------------------:|:-------------------:|:----------------------:|:--------------------:|
+| 1 | 1      | 1      | 1      | 1      | 1      |
+| 2 | 3      | 3      | 3      | 3      | 3      |
+| 3 | 9      | 9      | 9      | 9      | 9      |
+| 4 | 33     | 33     | 34     | 33     | 33     |
+| 5 | 153    | 153    | 154    | 153    | 153    |
+| 6 | 872    | 873    | 873    | 873    | 873    |
+| 7 | 5907   | 5913   | 5908   | 5908   | 5908   |
+| 8 | 46181  | 46233  | 46205  | 46181  | 46181  |
+| 9 | 408731 | 409113 | 408966 | 408731 | 408831 |
 
 ## Quick Start
 

@@ -8,21 +8,21 @@
 
 ## About
 
-This project takes a heuristic approach when attempting to solve the superpermutation problem. The superpermutation problem is an open mathematics problem. At the moment, the only strategy is `standard`, the classic recursive construction with length 1! + 2! + ... + n!. Once the alphabet cardinality reaches 6, it does not find the shortest _known_ superpermutation. This project is still a work in progress and further attempts to optimize the algorithm will be made.
+This project takes a heuristic approach when attempting to solve the superpermutation problem. The superpermutation problem is an open mathematics problem. The `standard` strategy is the classic recursive construction with length 1! + 2! + ... + n!. Once the alphabet cardinality reaches 6, it does not find the shortest _known_ superpermutation. The `egan` strategy is Greg Egan's construction with length n! + (n-1)! + (n-2)! + (n-3)! + n - 3, which is shorter than `standard` once the alphabet cardinality reaches 7. This project is still a work in progress and further attempts to optimize the algorithm will be made.
 
 ## Findings
 
-| **\|alphabet\|** | **\|shortest(alphabet)\|** | **\|standard(alphabet)\|** | **runtime(standard(alphabet))** |
-|:----------------:|:------------------------:|:---------------:|:---------------:|
-| 1 | 1      | 1      | 750ns        |
-| 2 | 3      | 3      | 2.166µs      |
-| 3 | 9      | 9      | 3.666µs      |
-| 4 | 33     | 33     | 8.583µs      |
-| 5 | 153    | 153    | 47.25µs      |
-| 6 | 872    | 873    | 254.709µs    |
-| 7 | 5907   | 5913   | 2.402625ms   |
-| 8 | 46205  | 46233  | 15.063542ms  |
-| 9 | 408966 | 409113 | 138.998333ms |
+| **\|alphabet\|** | **\|shortest(alphabet)\|** | **\|standard(alphabet)\|** | **\|egan(alphabet)\|** |
+|:----------------:|:------------------------:|:-----------------------:|:-------------------:|
+| 1 | 1      | 1      | 1      |
+| 2 | 3      | 3      | 3      |
+| 3 | 9      | 9      | 9      |
+| 4 | 33     | 33     | 34     |
+| 5 | 153    | 153    | 154    |
+| 6 | 872    | 873    | 873    |
+| 7 | 5907   | 5913   | 5908   |
+| 8 | 46181  | 46233  | 46205  |
+| 9 | 408731 | 409113 | 408966 |
 
 ## Development
 
@@ -32,3 +32,5 @@ Run `make help` for all available commands. In general, you can run `make build-
 
 - https://oeis.org/A180632
 - https://en.wikipedia.org/wiki/Superpermutation
+- https://github.com/jaypantone/superperm-upper-43-80
+- https://github.com/rumstd/superperm-upper-43-80_fork

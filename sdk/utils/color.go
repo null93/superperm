@@ -18,6 +18,22 @@ var Colors = []string{
 	"\033[95m",
 	"\033[96m",
 }
+var HexBackground = "#1e1e1e"
+var HexForeground = "#cccccc"
+var HexColors = []string{
+	"#cd3131",
+	"#0dbc79",
+	"#e5e510",
+	"#2472c8",
+	"#bc3fbc",
+	"#11a8cd",
+	"#f14c4c",
+	"#23d18b",
+	"#f5f543",
+	"#3b8eea",
+	"#d670d6",
+	"#29b8db",
+}
 
 var colorEnabled = true
 
@@ -34,6 +50,10 @@ func Colorize(input string, i int) string {
 	if !colorEnabled {
 		return input
 	}
+	return Colors[ColorIndex(i)] + input + ColorReset
+}
+
+func ColorIndex(i int) int {
 	n := len(Colors)
-	return Colors[((i%n)+n)%n] + input + ColorReset
+	return ((i % n) + n) % n
 }

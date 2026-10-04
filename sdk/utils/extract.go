@@ -2,6 +2,8 @@ package utils
 
 import (
 	"fmt"
+	"html"
+	"os"
 	"strings"
 )
 
@@ -130,6 +132,49 @@ func RenderRows(rows [][]Extraction, selected int) string {
 	return output.String()
 }
 
+func RenderSVG(rows [][]Extraction) string {
+	fontSize := 15
+	charWidth := 9
+	lineHeight := 20
+	padding := 16
+	columns := 0
+	for _, row := range rows {
+		for _, extraction := range row {
+			if end := extraction.Index + len(extraction.Permutation); end > columns {
+				columns = end
+			}
+		}
+	}
+	width := columns*charWidth + padding*2
+	height := len(rows)*lineHeight + padding*2
+	output := strings.Builder{}
+	fmt.Fprintf(&output, "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"%d\" height=\"%d\" viewBox=\"0 0 %d %d\">\n", width, height, width, height)
+	fmt.Fprintf(&output, "<style>text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,\"DejaVu Sans Mono\",\"Liberation Mono\",monospace;font-size:%dpx;fill:%s;white-space:pre}", fontSize, HexForeground)
+	for i, hex := range HexColors {
+		fmt.Fprintf(&output, ".c%d{fill:%s}", i, hex)
+	}
+	output.WriteString("</style>\n")
+	fmt.Fprintf(&output, "<rect width=\"100%%\" height=\"100%%\" fill=\"%s\"/>\n", HexBackground)
+	for r, row := range rows {
+		y := padding + r*lineHeight + (lineHeight+fontSize)/2 - 2
+		for _, extraction := range row {
+			x := padding + extraction.Index*charWidth
+			length := len(extraction.Permutation) * charWidth
+			class := ""
+			if colorEnabled {
+				class = fmt.Sprintf(" class=\"c%d\"", ColorIndex(extraction.Color))
+			}
+			fmt.Fprintf(&output, "<text%s x=\"%d\" y=\"%d\" textLength=\"%d\" lengthAdjust=\"spacing\">%s</text>\n", class, x, y, length, html.EscapeString(extraction.Permutation))
+		}
+	}
+	output.WriteString("</svg>\n")
+	return output.String()
+}
+
 func PrintExtraction(perms []string, superpermutation string) {
 	fmt.Print(RenderRows(PackExtractions(Extract(perms, superpermutation)), -1))
+}
+
+func WriteExtraction(perms []string, superpermutation, path string) error {
+	return os.WriteFile(path, []byte(RenderSVG(PackExtractions(Extract(perms, superpermutation)))), 0644)
 }

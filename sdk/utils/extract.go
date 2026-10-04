@@ -131,6 +131,5 @@ func RenderRows(rows [][]Extraction, selected int) string {
 }
 
 func PrintExtraction(perms []string, superpermutation string) {
-	fmt.Println(superpermutation)
 	fmt.Print(RenderRows(PackExtractions(Extract(perms, superpermutation)), -1))
 }

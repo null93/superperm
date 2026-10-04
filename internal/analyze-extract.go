@@ -12,7 +12,7 @@ var analyzeExtractCmd = &cobra.Command{
 	Aliases: []string{"ext"},
 	Args:    cobra.ExactArgs(1),
 	PreRunE: func(cmd *cobra.Command, args []string) error {
-		_, _, err := utils.ReadSolution(args[0])
+		_, _, err := utils.ReadSuperpermutation(args[0])
 		return err
 	},
 	Run: func(cmd *cobra.Command, args []string) {

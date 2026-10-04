@@ -26,7 +26,7 @@ func Run(perms []string, solution string) error {
 	pending := []byte{}
 	for {
 		if len(pending) < 1 {
-			draw(perms, cycles, selectedCycle)
+			draw(cycles, selectedCycle)
 			read, err := os.Stdin.Read(buffer)
 			if err != nil || read < 1 {
 				return nil
@@ -99,19 +99,11 @@ func rotation(clockwise bool) int {
 	return -1
 }
 
-func draw(perms []string, cycles []utils.Cycle, selected int) {
+func draw(cycles []utils.Cycle, selected int) {
 	solution, layout := utils.RenderCycles(cycles, selected)
-	status := "invalid"
-	if utils.IsSuperpermutation(perms, solution) {
-		status = "valid"
-	}
-	lines := []string{
-		fmt.Sprintf("%d", len(solution)),
-		solution,
-	}
-	lines = append(lines, strings.Split(strings.TrimRight(layout, "\n"), "\n")...)
-	lines = append(lines, "", fmt.Sprintf("cycle %d/%d %s | left/right select | up/down move | r/R rotate elements | s/S rotate cycles | q quit",
-		selected+1, len(cycles), status))
+	lines := strings.Split(strings.TrimRight(layout, "\n"), "\n")
+	lines = append(lines, "", fmt.Sprintf("length %d · ←/→ select · ↑/↓ move · r/R rotate elements · s/S rotate cycles · q quit",
+		len(solution)))
 	fmt.Print("\033[H\033[2J")
 	for _, line := range lines {
 		fmt.Print(line + "\r\n")

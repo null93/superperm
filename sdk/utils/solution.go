@@ -25,6 +25,17 @@ func ReadSolution(path string) (string, string, error) {
 	return solution, alphabet, nil
 }
 
+func ReadSuperpermutation(path string) (string, string, error) {
+	solution, alphabet, err := ReadSolution(path)
+	if err != nil {
+		return "", "", err
+	}
+	if missing := MissingPermutations(alphabet, solution); len(missing) > 0 {
+		return "", "", fmt.Errorf("solution is not a superpermutation, missing %d of %d permutations", len(missing), Factorial(len(alphabet)))
+	}
+	return solution, alphabet, nil
+}
+
 func ExtractAlphabet(input string) string {
 	seen := map[rune]bool{}
 	alphabet := []rune{}

@@ -119,7 +119,6 @@ valid superpermutation for n=3 with alphabet ABC and length 9
 ```console
 $ superperm analyze extract --no-color ./solutions/shortest/3-9.txt
 
-ABCABACBA
 ABC
  BCA
   CAB
@@ -151,8 +150,6 @@ A B C A B A C B A
 ```console
 $ superperm analyze interact ./solutions/shortest/3-9.txt
 
-9
-ABCABACBA
 ABC
  BCA
   CAB
@@ -160,7 +157,7 @@ ABC
      ACB
       CBA
 
-cycle 1/2 valid | left/right select | up/down move | r/R rotate elements | s/S rotate cycles | q quit
+length 9 · ←/→ select · ↑/↓ move · r/R rotate elements · s/S rotate cycles · q quit
 ```
 
 </details>

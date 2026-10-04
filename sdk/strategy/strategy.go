@@ -5,6 +5,7 @@ import (
 	"sort"
 
 	"github.com/null93/superperm/sdk/strategy/egan"
+	"github.com/null93/superperm/sdk/strategy/pantone"
 	"github.com/null93/superperm/sdk/strategy/standard"
 )
 
@@ -14,6 +15,7 @@ type Func func(alphabet string) string
 
 var strategies = map[string]Func{
 	"egan":     egan.Generate,
+	"pantone":  pantone.Generate,
 	"standard": standard.Generate,
 }
 

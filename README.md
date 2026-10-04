@@ -4,7 +4,7 @@
 ![license](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=for-the-badge)
 ![version](https://img.shields.io/badge/Version-2.0.0-lightgrey.svg?style=for-the-badge)
 
-<img width="882" height="617" alt="Screenshot" src="https://github.com/user-attachments/assets/cd20782b-e754-418c-94e4-e4683e4421e2" />
+<img width="882" height="617" alt="Screenshot" src="assets/screenshot.png" />
 
 ## About
 

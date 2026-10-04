@@ -8,11 +8,11 @@
 
 ## About
 
-This project takes a heuristic approach when attempting to solve the superpermutation problem. The superpermutation problem is an open mathematics problem. At the moment, when the alphabet cardinality is 6, this algorithm does not find the shortest _known_ superpermutation. This project is still a work in progress and further attempts to optimize the algorithm will be made.
+This project takes a heuristic approach when attempting to solve the superpermutation problem. The superpermutation problem is an open mathematics problem. At the moment, the only strategy is `standard`, the classic recursive construction with length 1! + 2! + ... + n!. Once the alphabet cardinality reaches 6, it does not find the shortest _known_ superpermutation. This project is still a work in progress and further attempts to optimize the algorithm will be made.
 
 ## Findings
 
-| **\|alphabet\|** | **\|shortest(alphabet)\|** | **\|rotate(alphabet)\|** | **runtime(rotate(alphabet))** |
+| **\|alphabet\|** | **\|shortest(alphabet)\|** | **\|standard(alphabet)\|** | **runtime(standard(alphabet))** |
 |:----------------:|:------------------------:|:---------------:|:---------------:|
 | 1 | 1      | 1      | 750ns        |
 | 2 | 3      | 3      | 2.166µs      |

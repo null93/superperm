@@ -4,69 +4,43 @@ import (
 	"errors"
 )
 
-var ErrUnknownAlphabet = errors.New("unknown alphabet")
-var ErrAlphabetSize = errors.New("cannot use alphabet with given n")
+var ErrAlphabetEmpty = errors.New("alphabet must be at least 1 character long")
+var ErrAlphabetCharacter = errors.New("alphabet must only contain printable ascii characters")
+var ErrAlphabetDuplicate = errors.New("alphabet must not contain duplicate characters")
+var ErrAlphabetSize = errors.New("alphabets must be the same size")
 var ErrCannotTranslate = errors.New("input string has characters not in alphabet")
 
-var Alphabets = map[string]string{
-	"latin": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-	"digit": "1234567890",
-	"hex":   "0123456789ABCDEF",
-}
-
-type AlphabetMapping struct {
-	From    string
-	To      string
-	Mapping map[rune]rune
-}
-
-type Translator interface {
-	Translate(input string) (string, error)
-}
-
-func IsSupportedAlphabet(alphabet string) bool {
-	_, ok := Alphabets[alphabet]
-	return ok
-}
-
-func (m *AlphabetMapping) Translate(input string) (string, error) {
-	result := []rune{}
-	for _, r := range input {
-		if _, ok := m.Mapping[r]; !ok {
-			return "", ErrCannotTranslate
+func Validate(alphabet string) error {
+	if len(alphabet) < 1 {
+		return ErrAlphabetEmpty
+	}
+	seen := map[rune]bool{}
+	for _, r := range alphabet {
+		if r < '!' || r > '~' {
+			return ErrAlphabetCharacter
 		}
-		result = append(result, m.Mapping[r])
+		if seen[r] {
+			return ErrAlphabetDuplicate
+		}
+		seen[r] = true
 	}
-	return string(result), nil
+	return nil
 }
 
-func NewTranslator(from, to string, n int) (Translator, error) {
-	if _, ok := Alphabets[from]; !ok {
-		return nil, ErrUnknownAlphabet
-	}
-	if _, ok := Alphabets[to]; !ok {
-		return nil, ErrUnknownAlphabet
-	}
-	if len(Alphabets[from]) < n || len(Alphabets[to]) < n {
-		return nil, ErrAlphabetSize
-	}
-	am := &AlphabetMapping{
-		From:    Alphabets[from][0:n],
-		To:      Alphabets[to][0:n],
-		Mapping: map[rune]rune{},
-	}
-	for i, r := range am.From {
-		am.Mapping[r] = []rune(am.To)[i]
-	}
-	return am, nil
-}
-
-func GetAlphabet(name string, n int) (string, error) {
-	if _, ok := Alphabets[name]; !ok {
-		return "", ErrUnknownAlphabet
-	}
-	if len(Alphabets[name]) < n {
+func Translate(input, from, to string) (string, error) {
+	if len([]rune(from)) != len([]rune(to)) {
 		return "", ErrAlphabetSize
 	}
-	return Alphabets[name][0:n], nil
+	mapping := map[rune]rune{}
+	for i, r := range []rune(from) {
+		mapping[r] = []rune(to)[i]
+	}
+	result := []rune{}
+	for _, r := range input {
+		if _, ok := mapping[r]; !ok {
+			return "", ErrCannotTranslate
+		}
+		result = append(result, mapping[r])
+	}
+	return string(result), nil
 }

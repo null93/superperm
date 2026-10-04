@@ -1,38 +1,26 @@
 package internal
 
 import (
-	"fmt"
-	"os"
-
 	"github.com/null93/superperm/sdk/utils"
 	"github.com/spf13/cobra"
 )
 
 var analyzeHeatMapCmd = &cobra.Command{
-	Use:     "heatmap -a ALPHABET -f FILE",
+	Use:     "heatmap FILE",
 	Short:   "Histogram of solution with magnitude representing how many permutations it is a part of",
-	Example: "heatmap -a 1234 -f ./solutions/rotate/4-33.txt | less -RS",
+	Example: "heatmap ./solutions/standard/4-33.txt | less -RS",
 	Aliases: []string{"heat"},
-	Args:    cobra.NoArgs,
+	Args:    cobra.ExactArgs(1),
 	PreRunE: func(cmd *cobra.Command, args []string) error {
-		alphabet, _ := cmd.Flags().GetString("alphabet")
-		solutionPath, _ := cmd.Flags().GetString("file")
-		if len(alphabet) < 1 {
-			return fmt.Errorf("alphabet must be at least 1 character long")
-		}
-		if _, err := os.Stat(solutionPath); err != nil {
-			return fmt.Errorf("file does not exist")
-		}
-		return nil
+		_, _, err := utils.ReadSolution(args[0])
+		return err
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		noColor, _ := cmd.Flags().GetBool("no-color")
-		alphabet, _ := cmd.Flags().GetString("alphabet")
-		solutionPath, _ := cmd.Flags().GetString("file")
-		solution, _ := os.ReadFile(solutionPath)
+		solution, alphabet, _ := utils.ReadSolution(args[0])
 		permutations := utils.Permutations(alphabet)
 		utils.DisableColor(noColor)
-		utils.PrintHeatMap(permutations, string(solution))
+		utils.PrintHeatMap(permutations, solution)
 	},
 }
 
@@ -40,6 +28,4 @@ func init() {
 	analyzeCmd.AddCommand(analyzeHeatMapCmd)
 	analyzeHeatMapCmd.Flags().SortFlags = true
 	analyzeHeatMapCmd.Flags().Bool("no-color", false, "show colors in output")
-	analyzeHeatMapCmd.Flags().StringP("alphabet", "a", "", "exact alphabet used to generate the solution")
-	analyzeHeatMapCmd.Flags().StringP("file", "f", "", "path to file with solution")
 }

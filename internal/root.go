@@ -14,5 +14,6 @@ func init() {
 		Use:    "no-help",
 		Hidden: true,
 	})
+	RootCmd.CompletionOptions.HiddenDefaultCmd = true
 	RootCmd.Flags().SortFlags = true
 }
